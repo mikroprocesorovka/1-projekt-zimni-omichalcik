@@ -11,4 +11,5 @@ knihovnu pro práci s periferiemi
 je třeba (z licenčních důvodů) stáhnou zvlášť ze stránek výrobce a použít
 [patch](https://github.com/gicking/STM8-SPL_SDCC_patch).
 
-
+Práce obshuje minutky se segmentovým displejem max7219 a rotačním enkodérem.
+Nastavuje se od 0 do 99:99 po 10 sekundách
