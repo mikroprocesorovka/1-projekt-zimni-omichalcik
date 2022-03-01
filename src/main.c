@@ -63,7 +63,7 @@ l_snake = milis();
 }
 
 void klok (void){
-	if (sekunda == 0){l_pauza = 2;}		//abz šel po uběhnutí času opět přičítat enkodérem
+	if (sekunda == 0){l_pauza = 2;}		//aby šel po uběhnutí času opět přičítat enkodérem
 }
 
 void had(void){
@@ -108,7 +108,7 @@ void displej_sender(void){
 
 
 
-/*void end_anim(void){			//nedokončený kód pro konečnou animaci (je starý a pravděpodobně nefunkční)
+void end_anim(void){			
 	l_end = milis();
 	if (milis() - l_end <=1000){
 		swspi_tx16(DECODEMODE | 0);
@@ -127,11 +127,11 @@ void displej_sender(void){
 	if (milis() - l_end >=2000){
 		l_end = milis();
 	}
-}*/
+}
 
 INTERRUPT_HANDLER(TIM2_UPD_OVF_BRK_IRQHandler, 13){
 	TIM2_ClearITPendingBit(TIM2_IT_UPDATE);
-	if((l_pauza == 0 || l_pauza == 3) && sekunda>0){sekunda--;}		//odečítání pouye při
+	if((l_pauza == 0 || l_pauza == 3) && sekunda>0){sekunda--;}		//odečítání pouze při určitých stavech  stavového automatu
 }
 
 INTERRUPT_HANDLER(TIM3_UPD_OVF_BRK_IRQHandler, 15){	 
@@ -168,10 +168,11 @@ void process_enc(void){
 	if(GPIO_ReadInputPin(GPIOF,GPIO_PIN_7) == RESET && minule==1){
 		minule = 0;
 		if(GPIO_ReadInputPin(GPIOF,GPIO_PIN_6) == RESET){
-			if(l_pauza == 1 || l_pauza == 2){sekunda = sekunda-10;}			//yablokuje přidávání při odpočtu
+			if(l_pauza == 1 || l_pauza == 2){sekunda = sekunda-10;}			//zablokuje přidávání při odpočtu
 			if(sekunda<0){sekunda=5999;}																//odečtení pod nulu nastaví na maximální čas
 		}else{
 			if(l_pauza == 1 || l_pauza == 2){sekunda = sekunda+10;}
+			if(sekunda>5999){sekunda=0;}
 		}
 	}
 	if(GPIO_ReadInputPin(GPIOF,GPIO_PIN_7) != RESET){minule = 1;}
